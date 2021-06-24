@@ -1,25 +1,26 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React from "react";
+import axios from "axios";
+import styled from "styled-components";
 
-export default class PokeImg extends Component {
-
-    state = {
-        img: []
+const Img = styled.img`
+    width: 24vw;
+    height: 28vh;
+    padding: 1vw 1vh;
+`
+export default class PokeImg extends React.Component{
+    state={
+        img:[]
     }
-
-    async componentDidMount() {
-        const response = await axios.get(this.props.url)
-        console.log(response.data.sprites.other.dream_world.front_default, )
-
-        this.setState({
-            img: response.data.sprites.other.dream_world.front_default
-        })
+    async componentDidMount(){
+        const response = await axios.get(this.props.img)
+       this.setState({
+           img: response.data.sprites.other.dream_world.front_default
+       })
     }
-    
-    render() {
+    render(){
         return(
             <div>
-                <img className="poke-img" src={this.state.img} alt=""/>
+                <Img src= {this.state.img}alt="Pokemon"/>
             </div>
         )
     }

@@ -1,51 +1,83 @@
-import React, { Component } from 'react'
-import pokeballImg from './img/Pokeball-icon@2x.png'
-import './App.css'
+import React from 'react'
+import styled from 'styled-components'
 import axios from 'axios'
 import PokeImg from './PokeImg'
+import './App.css'
 
-const api = axios.create({
-  baseURL: "https://pokeapi.co/api/v2/pokemon?offset=0&limit=105"
-});
+const data = axios.create({
+  baseURL: "https://pokeapi.co/api/v2/pokemon?offset=0&limit=150"
+})
+
+const Container = styled.div`
+  width:100%;
+  background-color: #2e388d;
+`
+const TitleBox = styled.div`
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const Title = styled.h1`
+  color:white;
+  font-size: 5vw;
+`
+const BoxCard = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
+  gap: 3rem;
+  padding: 5vh 5vw;
+`
+const PokeName = styled.h2`
+  color:#ebe6e1;
+  text-transform: capitalize;
+`
+const Card = styled.div`
+height: 50vh;  
+padding: 5vh 5vw;
+  border: 2px solid #ebe6e1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  &:hover{
+    background-color:rgba(255, 255, 255, 0.7);
+    border:none;
+    ${PokeName}{
+      color: #2e388d;
+    }
+  }
+`
 
 
-export default class Pokedex extends Component {
-  
-  state = {
+export default class PokeList extends React.Component{
+  state ={
     pokeList: []
   }
-  
-  async componentDidMount() {
-    const response = await api.get();
-    console.log(response.data.results);
 
+  async componentDidMount(){
+    const response = await data.get()
     this.setState({
-      pokeList: response.data.results,
-    });
+      pokeList:response.data.results
+    })
   }
 
-
   render(){
-    return (
-      <div className="body">
-        <div className="container-img-title">
-          <img className="main-img" src={pokeballImg} alt="pokeball"></img>
-          <h1 className="title">POKEDEX</h1>
-        </div>
-          <div className="box-map" >
-            {this.state.pokeList.map((item,index) =>(
-            <div className="map-items" key ={index}>
-              <div className="img-div" >
-                <PokeImg url={item.url} alt="" />
-              </div>
-              <div className="text-div">
-                <h2>{item.name}</h2>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-              </div>
-            </div>
+    return(
+      <Container>
+        <TitleBox>
+        <Title>Pokedex App</Title>
+        </TitleBox>
+        <BoxCard>
+          {this.state.pokeList.map((item, index)=> (
+            <Card>
+              <PokeImg img={item.url}/>
+              <PokeName key={index}>{item.name}</PokeName>
+            </Card>
           ))}
-        </div>
-      </div>
+        </BoxCard> 
+      </Container>
     )
   }
 }
